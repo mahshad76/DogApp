@@ -22,6 +22,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -82,6 +85,7 @@ fun DogItem(
     dog: Dog,
     modifier: Modifier = Modifier
 ) {
+    val expanded = remember { mutableStateOf(false) }
     Card(
         modifier
             .padding(10.dp)
@@ -99,22 +103,30 @@ fun DogItem(
                 Icon(
                     imageVector = Icons.Filled.ExpandMore,
                     contentDescription = stringResource(R.string.expand_button_content_description),
-                    tint = MaterialTheme.colorScheme.secondary
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.clickable {
+                        expanded.value = !expanded.value
+
+                    }
                 )
             }
-            DogHobby(dog.hobbies)
+            if (expanded.value) {
+                DogHobby(dog.hobbies)
+            }
         }
     }
 }
 
 @Composable
 fun DogHobby(hobbies: Int) {
-    Column (modifier = Modifier.padding(
-        start = dimensionResource(R.dimen.padding_medium),
-        top = dimensionResource(R.dimen.padding_small),
-        end = dimensionResource(R.dimen.padding_medium),
-        bottom = dimensionResource(R.dimen.padding_medium)
-    )) {
+    Column(
+        modifier = Modifier.padding(
+            start = dimensionResource(R.dimen.padding_medium),
+            top = dimensionResource(R.dimen.padding_small),
+            end = dimensionResource(R.dimen.padding_medium),
+            bottom = dimensionResource(R.dimen.padding_medium)
+        )
+    ) {
         Text(
             text = stringResource(R.string.about),
             style = MaterialTheme.typography.labelSmall
